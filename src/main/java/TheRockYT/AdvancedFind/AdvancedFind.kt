@@ -63,6 +63,7 @@ class AdvancedFind : Plugin() {
 
         config?.add("permission.reload", "AdvancedFind.reload")
         config?.add("permission.find", "AdvancedFind.find")
+        config?.add("permission.connect", "AdvancedFind.connect")
 
         config?.add("messages.info", "&2AdvancedFind &6> &2AdvancedFind &aby TheRockYT")
 
@@ -70,10 +71,15 @@ class AdvancedFind : Plugin() {
         val help: ArrayList<String> = ArrayList()
         help.add("&2AdvancedFind &6> &cUse \"AdvancedFind version\" to check for updates.")
         help.add("&2AdvancedFind &6> &cUse \"AdvancedFind reload\" to reload the config.")
-        help.add("&2AdvancedFind &6> &cUse \"AdvancedFind <player>\" to reload the config.")
+        help.add("&2AdvancedFind &6> &cUse \"AdvancedFind <player>\" to find a player.")
+        help.add("&2AdvancedFind &6> &cUse \"AdvancedFind <player> connect\" to connect to a server, ware the player was found.")
         config?.add("messages.help", help)
         config?.add("messages.not_online", "&2AdvancedFind &6> &cThis player is not online.")
-        config?.add("messages.online", "&2AdvancedFind &6> &cThis player is playing on %server%.")
+        config?.add("messages.online", "&2AdvancedFind &6> &aThis player is playing on %server%. Click to connect.")
+        config?.add("messages.connect", "&aClick to connect to %server%.")
+        config?.add("messages.connecting", "&2AdvancedFind &6> &aSending you to %server%...")
+        config?.add("messages.connected", "&2AdvancedFind &6> &cYou already connected to %server%.")
+        config?.add("messages.no_player", "&2AdvancedFind &6> &cYou need to be a player.")
         config?.add("messages.reload_start", "&2AdvancedFind &6> &aReloading &2AdvancedFind...")
         config?.add("messages.reload_end", "&2AdvancedFind &6> &2AdvancedFind &awas loaded.")
         val development_outdated = ArrayList<String>()

@@ -1,7 +1,11 @@
 {
-  "latest": "-",
-  "latest_development": "0.0.1",
+  "latest": "1.0",
+  "latest_development": "1.0",
   "versions": [
+    {
+      "version": "1.0",
+      "release": false
+    },
     {
       "version": "0.0.1",
       "release": false

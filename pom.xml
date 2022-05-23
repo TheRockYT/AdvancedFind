@@ -6,7 +6,7 @@
 
     <groupId>TheRockYT</groupId>
     <artifactId>AdvancedFind</artifactId>
-    <version>1.0 Beta</version>
+    <version>1.0</version>
     <packaging>jar</packaging>
 
     <name>AdvancedFind</name>

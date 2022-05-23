@@ -2,8 +2,13 @@ package TheRockYT.AdvancedFind
 
 import net.md_5.bungee.api.CommandSender
 import net.md_5.bungee.api.ProxyServer
+import net.md_5.bungee.api.chat.ClickEvent
+import net.md_5.bungee.api.chat.ComponentBuilder
+import net.md_5.bungee.api.chat.HoverEvent
+import net.md_5.bungee.api.chat.TextComponent
 import net.md_5.bungee.api.connection.ProxiedPlayer
 import net.md_5.bungee.api.plugin.Command
+
 
 class AdvancedFindCommand(name: String?) : Command(name) {
     override fun execute(sender: CommandSender?, args: Array<out String>?) {
@@ -45,11 +50,42 @@ class AdvancedFindCommand(name: String?) : Command(name) {
                 if(player == null){
                     sender.sendMessage(AdvancedFind.replacePlaceholder(AdvancedFind.config?.get("messages.not_online")))
                 }else {
-                    sender.sendMessage(
-                        AdvancedFind.replacePlaceholder(AdvancedFind.config?.get("messages.online"))
-                            ?.replace("%server%", player.server.info.name)
-                    )
+                    val message = TextComponent(AdvancedFind.replacePlaceholder(AdvancedFind.config?.get("messages.online"))?.replace("%server%", player.server.info.name))
+                    message.setClickEvent(ClickEvent(ClickEvent.Action.RUN_COMMAND, "/advancedfind "+player.name+" connect"))
+                    message.setHoverEvent(HoverEvent(HoverEvent.Action.SHOW_TEXT, ComponentBuilder(AdvancedFind.replacePlaceholder(AdvancedFind.config?.get("messages.connect"))?.replace("%server%", player.server.info.name)).create()))
+                    sender.sendMessage(message)
+                }
+            } else {
+                sender.sendMessage(
+                    AdvancedFind.replacePlaceholder(AdvancedFind.config?.get("messages.permission"))
+                        ?.replace("%permission%", perm!!)
+                )
+            }
+        }else if(args[1].equals("connect", true)) {
+            val perm: String? = AdvancedFind.config?.getString("permission.connect")
+            if (sender!!.hasPermission(perm)) {
+                val player: ProxiedPlayer? = ProxyServer.getInstance().getPlayer(args[0])
+                if(player == null){
+                    sender.sendMessage(AdvancedFind.replacePlaceholder(AdvancedFind.config?.get("messages.not_online")))
+                }else {
 
+                    if(sender is ProxiedPlayer){
+                        if(sender.server.info.name.equals(player.server.info.name)){
+                            sender.sendMessage(AdvancedFind.replacePlaceholder(AdvancedFind.config?.get("messages.connected"))?.replace("%server%", player.server.info.name))
+
+                        }else{
+                            sender.sendMessage(AdvancedFind.replacePlaceholder(AdvancedFind.config?.get("messages.connecting"))?.replace("%server%", player.server.info.name))
+
+                            sender.connect(player.server.info)
+                        }
+                    }else{
+
+                        sender.sendMessage(AdvancedFind.replacePlaceholder(AdvancedFind.config?.get("messages.no_player")))
+                    }
+                    /*val message = TextComponent(AdvancedFind.replacePlaceholder(AdvancedFind.config?.get("messages.online"))?.replace("%server%", player.server.info.name))
+                    message.setClickEvent(ClickEvent(ClickEvent.Action.RUN_COMMAND, "advancedfind "+player.name+" connect"))
+                    message.setHoverEvent(HoverEvent(HoverEvent.Action.SHOW_TEXT, ComponentBuilder(AdvancedFind.replacePlaceholder(AdvancedFind.config?.get("messages.connect"))?.replace("%server%", player.server.info.name)).create()))
+                    */
                 }
             } else {
                 sender.sendMessage(
