@@ -1,0 +1,4 @@
+name: AdvancedFind
+version: '${project.version}'
+main: TheRockYT.AdvancedFind.AdvancedFind
+description: AdvancedFind by TheRockYT
