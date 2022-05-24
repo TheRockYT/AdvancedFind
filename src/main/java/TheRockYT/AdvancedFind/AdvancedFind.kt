@@ -8,9 +8,11 @@ import java.io.File
 class AdvancedFind : Plugin() {
     companion object {
         var config: Config? = null
+        var data_config: Config? = null
         var updater: Updater? = null
         var version: String? = null
         var instance: AdvancedFind? = null
+        var data: Boolean? = null
 
         fun replacePlaceholder(obj: Any?): String? {
             var finalString: String? = null
@@ -48,6 +50,7 @@ class AdvancedFind : Plugin() {
         cm.sendMessage("§aLoading §2AdvancedFind...")
         instance = this
         config = Config(File(dataFolder, "config.yml"))
+        data_config = Config(File(dataFolder, "data.yml"))
         version = description.version
         reload()
 
@@ -56,9 +59,11 @@ class AdvancedFind : Plugin() {
     }
     fun reload() {
         ProxyServer.getInstance().pluginManager.unregisterCommands(this)
+        ProxyServer.getInstance().pluginManager.unregisterListeners(this)
         
         config?.load()
         config?.set("info", "AdvancedFind v$version by TheRockYT.")
+        config?.add("data", false)
         config?.add("permission.updates", "AdvancedFind.version")
 
         config?.add("permission.reload", "AdvancedFind.reload")
@@ -79,6 +84,9 @@ class AdvancedFind : Plugin() {
         config?.add("messages.connect", "&aClick to connect to %server%.")
         config?.add("messages.connecting", "&2AdvancedFind &6> &aSending you to %server%...")
         config?.add("messages.connected", "&2AdvancedFind &6> &cYou already connected to %server%.")
+        config?.add("messages.last_server", "&2AdvancedFind &6> &aThis player played last time on %server%. Click to connect.")
+        config?.add("messages.not_exist", "&2AdvancedFind &6> &cThis server does not exist.")
+        config?.add("messages.no_data", "&2AdvancedFind &6> &aThis player played never before.")
         config?.add("messages.no_player", "&2AdvancedFind &6> &cYou need to be a player.")
         config?.add("messages.reload_start", "&2AdvancedFind &6> &aReloading &2AdvancedFind...")
         config?.add("messages.reload_end", "&2AdvancedFind &6> &2AdvancedFind &awas loaded.")
@@ -101,6 +109,7 @@ class AdvancedFind : Plugin() {
         config?.add("messages.update.checking", "&2AdvancedFind &6> &aChecking for updates...")
         config?.add("messages.update.check_failed", "&2AdvancedFind &6> &4Update check failed.")
         config?.save()
+        data = config?.getBool("data")
         if (updater != null) {
             updater?.stop()
         }
@@ -110,6 +119,11 @@ class AdvancedFind : Plugin() {
         ProxyServer.getInstance().pluginManager.registerCommand(this, AdvancedFindCommand("AdvancedFind"))
         ProxyServer.getInstance().pluginManager.registerCommand(this, AdvancedFindCommand("find"))
         ProxyServer.getInstance().pluginManager.registerCommand(this, AdvancedFindCommand("afind"))
+        if(data == true){
+
+            ProxyServer.getInstance().pluginManager.registerListener(this, ServerChangeDataListener())
+            data_config?.load()
+        }
     }
     
     override fun onDisable() {
